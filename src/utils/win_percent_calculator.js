@@ -26,6 +26,19 @@ function checkWhichTeamWon(match) {
   }
 }
 
+function checkHowManyRoundsATeamWon(teamName, matches) {
+  let teamRoundWons = 0;
+  matches.forEach((match) => {
+    if (match.match_team2_name == teamName) {
+      teamRoundWons += match.match_team1_total_rounds;
+    } else if (match.match_team1_name == teamName) {
+      teamRoundWons += match.match_team2_total_rounds;
+    }
+  });
+
+  return teamRoundWons;
+}
+
 function checkHowManyTimesATeamLost(teamName, matches) {
   let teamLossCounter = 0;
   matches.forEach((match) => {
@@ -50,4 +63,5 @@ function checkWhichTeamLost(match) {
 
 module.exports = {
   calculateWinPercentage,
+  checkHowManyRoundsATeamWon,
 };
