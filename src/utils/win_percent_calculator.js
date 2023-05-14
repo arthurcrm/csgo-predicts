@@ -64,4 +64,5 @@ function checkWhichTeamLost(match) {
 module.exports = {
   calculateWinPercentage,
   checkHowManyRoundsATeamWon,
+  checkHowManyTimesATeamWon,
 };

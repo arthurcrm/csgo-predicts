@@ -1,36 +1,23 @@
 const csgoDatabaseData = require("./models/csgo-predicts-db-data.json");
-const { calculateWinPercentage, checkHowManyRoundsATeamWon } = require("./utils/win_percent_calculator");
+const { calculateWinPercentage, checkHowManyRoundsATeamWon, checkHowManyTimesATeamWon } = require("./utils/win_percent_calculator");
+const { getMaps, getTeamNames, getMatchups } = require("./utils/getters");
+const fs = require("fs");
 
 function start() {
-  // Índice de desempenho do jogador = (kills + assists / 2) - (deaths / 2) + (rounds_vencidos / rounds_jogados) * 100.
-
   const teamsNames = getTeamNames(csgoDatabaseData);
 
-  teamsNames.forEach((teamName) => {
-    const teamWinPercentage = calculateWinPercentage(teamName, csgoDatabaseData);
-    const teamRoundWons = checkHowManyRoundsATeamWon(teamName, csgoDatabaseData);
+  const maps = getMaps(csgoDatabaseData);
 
-    console.log("A porcentagem de vitoria do time", teamName, "é de", teamWinPercentage, "%");
-    console.log("\br");
-    console.log("O time", teamName, "venceu", teamRoundWons, "rounds em sua historia.");
-  });
-}
+  const newDatabaseData = {
+    teams: teamsNames.map((teamName) => teamName),
+    maps,
+    team_history: teamsNames.map((teamName) => checkHowManyTimesATeamWon(teamName, csgoDatabaseData)),
+    team_win_percent: teamsNames.map((teamName) => calculateWinPercentage(teamName, csgoDatabaseData).toFixed(2)),
+    team_won_rounds: teamsNames.map((teamName) => checkHowManyRoundsATeamWon(teamName, csgoDatabaseData)),
+    matchups: getMatchups(csgoDatabaseData),
+  };
 
-function getTeamNames(matches) {
-  const TeamsName = [];
-
-  matches.forEach((match) => {
-    const [team1, team2] = [match.match_team1_name, match.match_team2_name];
-
-    if (!TeamsName.includes(team1)) {
-      TeamsName.push(team1);
-    }
-
-    if (!TeamsName.includes(team2)) {
-      TeamsName.push(team2);
-    }
-  });
-  return TeamsName;
+  fs.writeFileSync("database-matchups-data.json", JSON.stringify(newDatabaseData));
 }
 
 start();

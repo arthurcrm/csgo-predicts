@@ -1,0 +1,12 @@
+{
+  "name": "csgo-predicts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/arthurcrm/csgo-predicts.git",
+  "author": "Arthur <arthur.carneirontk@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "json-2-csv": "^4.0.0",
+    "prettier": "^2.8.8"
+  }
+}
