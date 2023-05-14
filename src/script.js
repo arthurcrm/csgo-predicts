@@ -4,7 +4,7 @@ const { calculateWinPercentage, checkHowManyRoundsATeamWon } = require("./utils/
 function start() {
   // Índice de desempenho do jogador = (kills + assists / 2) - (deaths / 2) + (rounds_vencidos / rounds_jogados) * 100.
 
-  const teamsNames = checkTeams(csgoDatabaseData);
+  const teamsNames = getTeamNames(csgoDatabaseData);
 
   teamsNames.forEach((teamName) => {
     const teamWinPercentage = calculateWinPercentage(teamName, csgoDatabaseData);
@@ -16,7 +16,7 @@ function start() {
   });
 }
 
-function checkTeams(matches) {
+function getTeamNames(matches) {
   const TeamsName = [];
 
   matches.forEach((match) => {
