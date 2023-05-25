@@ -1,3 +1,5 @@
+const { setMatchup } = require("./setters");
+
 function getTeamNames(matches) {
   const TeamsName = [];
 
@@ -30,12 +32,24 @@ function getMaps(matches) {
 
 function getMatchups(matches) {
   const matchups = [];
-  matches.forEach((match) => {
-    matchups.push(
-      `${match.match_team1_name} vs ${match.match_team2_name} - ${match.match_map} - Vencedor: ${
-        match.match_team1_total_rounds > match.match_team2_total_rounds ? match.match_team1_name : match.match_team2_name
-      }`
-    );
+  let repeatedMatchesCounter = 0;
+  let teamOneWinCount = 0;
+  let teamTwoWinCount = 0;
+
+  console.log(matches[0]);
+  console.log(matches[1]);
+  console.log(matches[2]);
+
+  matches.forEach((match, index) => {
+    if (index > 0) {
+      if (match.match_map_stat_ids === matches[index - 1].match_map_stat_ids) {
+        repeatedMatchesCounter++;
+      } else {
+        repeatedMatchesCounter = 0;
+      }
+    }
+
+    matchups.push(setMatchup(match, repeatedMatchesCounter));
   });
 
   return matchups;
@@ -45,4 +59,5 @@ module.exports = {
   getTeamNames,
   getMaps,
   getMatchups,
+  getMatchType,
 };
